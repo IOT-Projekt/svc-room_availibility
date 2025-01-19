@@ -1,0 +1,12 @@
+---
+services:
+  perceived-temp-service:
+    container_name: svc-room_availibility
+    image: svenschmidt1502/svc-room_availibility:latest
+    network_mode: host
+    environment:
+      - 'KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}' 
+      - 'KAFKA_GROUP_ID=${KAFKA_GROUP_ID}' 
+      - TZ=Europe/Berlin 
+    deploy:
+      replicas: 1
