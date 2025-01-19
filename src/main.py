@@ -15,7 +15,7 @@ def main():
 
     # Set up Kafka consumer
     kafka_config = KafkaConfig()
-    consumer = setup_kafka_consumer(kafka_config, ["room_status_topic"])
+    consumer = setup_kafka_consumer(kafka_config, ["room_status"])
 
     status_placeholder = st.empty()
 
