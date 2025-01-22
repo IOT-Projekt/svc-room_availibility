@@ -1,33 +1,50 @@
 import streamlit as st
 import json
-import time
 from kafka_handler import KafkaConfig, setup_kafka_consumer
+import logging
 
-# Function to get room status from Kafka
-def get_room_status(consumer):
-    for message in consumer:
-        data = json.loads(message.value.decode('utf-8'))
-        return data.get('room_status', False)
+# Set up logging
+logging.basicConfig(level=logging.INFO)
 
-# Streamlit app
-def main():
-    st.title("Room Availability Dashboard")
+# Constants
+ROOM_AVAILABLE_STR = "Raum B-0.270 ist frei"
+ROOM_UNAVAILABLE_STR = "Raum B-0.270 ist belegt"
 
-    # Set up Kafka consumer
+
+# Function to get the room status from the message
+def get_room_status(message):
+    
+    logging.info(f"Received message: {message.value}") # TODO: Remove
+    payload_str = message.value["message"]
+    logging.info(f"Received message: {payload_str}, Type: {type(payload_str)}") # TODO: Remove
+    data = json.loads(payload_str)
+    logging.info(f"Received message: {data}")
+    logging.info(f"Button toggled: {data.get('button_toggled')}")
+    return data.get("button_toggled")
+
+
+def get_kafka_consumer():
     kafka_config = KafkaConfig()
     consumer = setup_kafka_consumer(kafka_config, ["room_status"])
+    return consumer
 
+def main():
+    # Set up the Kafka consumer
+    consumer = get_kafka_consumer()
+    
+    # Set up the Streamlit app
+    st.title("Verfügbare Räume")
+
+    # Create a placeholder for the status message and display the initial status
     status_placeholder = st.empty()
+    status_placeholder.success(ROOM_AVAILABLE_STR, icon="✅")
 
-    while True:
-        room_status = get_room_status(consumer)
-
-        if room_status:
-            status_placeholder.success("Room is available", icon="✅")
+    for message in consumer:
+        if get_room_status(message):
+            status_placeholder.success(ROOM_AVAILABLE_STR, icon="✅")
         else:
-            status_placeholder.error("Room is booked", icon="❌")
+            status_placeholder.error(ROOM_UNAVAILABLE_STR, icon="❌")
 
-        time.sleep(5)  # Update every 5 seconds
 
 if __name__ == "__main__":
     main()
