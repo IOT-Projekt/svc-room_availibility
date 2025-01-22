@@ -13,13 +13,10 @@ ROOM_UNAVAILABLE_STR = "Raum B-0.270 ist belegt"
 
 # Function to get the room status from the message
 def get_room_status(message):
+    logging.info(f"Received message: {message}")
     
-    logging.info(f"Received message: {message.value}") # TODO: Remove
     payload_str = message.value["message"]
-    logging.info(f"Received message: {payload_str}, Type: {type(payload_str)}") # TODO: Remove
     data = json.loads(payload_str)
-    logging.info(f"Received message: {data}")
-    logging.info(f"Button toggled: {data.get('button_toggled')}")
     return data.get("button_toggled")
 
 
