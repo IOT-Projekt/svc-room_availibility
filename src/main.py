@@ -2,6 +2,7 @@ import streamlit as st
 import json
 from kafka_handler import KafkaConfig, setup_kafka_consumer
 import logging
+import os
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -10,6 +11,8 @@ logging.basicConfig(level=logging.INFO)
 ROOM_AVAILABLE_STR = "Raum B-0.270 ist frei"
 ROOM_UNAVAILABLE_STR = "Raum B-0.270 ist belegt"
 
+# Kafka topic
+KAFKA_ROOM_STATUS_TOPIC = os.getenv("KAFKA_ROOM_STATUS_TOPIC", "room_status")
 
 # Function to get the room status from the message
 def get_room_status(message):
@@ -22,7 +25,7 @@ def get_room_status(message):
 
 def get_kafka_consumer():
     kafka_config = KafkaConfig()
-    consumer = setup_kafka_consumer(kafka_config, ["room_status"])
+    consumer = setup_kafka_consumer(kafka_config, [KAFKA_ROOM_STATUS_TOPIC])
     return consumer
 
 def main():
