@@ -12,7 +12,7 @@ ROOM_AVAILABLE_STR = "Raum B-0.270 ist frei"
 ROOM_UNAVAILABLE_STR = "Raum B-0.270 ist belegt"
 
 # Kafka room status topic from environment variable
-KAFKA_ROOM_STATUS_TOPIC = os.getenv("KAFKA_ROOM_STATUS_TOPIC", "room_status")
+KAFKA_ROOM_STATUS_TOPIC = os.getenv("KAKFA_ROOM_STATUS_TOPIC", "iot.devices.room_status")
 
 
 def get_room_status(message) -> bool:
