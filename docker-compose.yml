@@ -1,6 +1,6 @@
 ---
 services:
-  perceived-temp-service:
+  svc-room_availibility:
     container_name: svc-room_availibility
     image: svenschmidt1502/svc-room_availibility:latest
     network_mode: host
