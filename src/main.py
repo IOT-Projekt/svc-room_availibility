@@ -20,8 +20,7 @@ def get_room_status(message) -> bool:
     logging.info(f"Received message: {message.topic} -> {message.value}")
 
     # Get the button value from the message and rerturn the new status
-    data = json.loads(message.value["message"])
-    return data.get("button_toggled")
+    return message.get("button_toggled")
 
 
 def get_kafka_consumer():
